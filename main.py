@@ -12,24 +12,23 @@ from flask import Flask, request
 
 
 #################
-import openai
+#import openai
 	
-openai.api_key = os.getenv("OPENAI_API_KEY")
+#openai.api_key = os.getenv("OPENAI_API_KEY")
 line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
 #parser = WebhookParser(os.getenv("LINE_CHANNEL_SECRET"))
 handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET")) 
 
-
-	
+'''
 conversation = []
 
-class ChatGPT:  
+#class ChatGPT:  
     
 
-    def __init__(self):
+#    def __init__(self):
         
-        self.messages = conversation
-        self.model = os.getenv("OPENAI_MODEL", default = "gpt-3.5-turbo")
+#        self.messages = conversation
+#        self.model = os.getenv("OPENAI_MODEL", default = "gpt-3.5-turbo")
 
 
 
@@ -55,7 +54,8 @@ class ChatGPT:
 
 
 
-chatgpt = ChatGPT()
+#chatgpt = ChatGPT()
+'''
 
 app = Flask(__name__)
 #run_with_ngrok(app)   #starts ngrok when the app is run
@@ -85,7 +85,7 @@ def handle_message(event):
     user_message = event.message.text
 
 
-    reply_msg = chatgpt.get_response(user_message)
+    reply_msg = user_message
     
     
     print(reply_msg)
