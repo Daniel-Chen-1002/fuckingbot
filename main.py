@@ -187,15 +187,16 @@ def handle_message(event):
             w.pop()
     if toggle == "Season":
         if event.message.text.split(" ")[0] == "!join":
-            for i in event.message.mention.mentionees:
-                x = []
-                x.append(event.message.text.split(" ")[-1])
-                print(event.message.text.split(" "))
-                x.append(0)
-                team[i.user_id] = x
-                if x[0] not in totalTeams:
-                    totalTeams.append(x[0])
-            season[event.message.text.split(" ")[-1]] = [1000, 0]
+	    if user == "U4e5ae01224117b28f662c288775be0a7":
+	        for i in event.message.mention.mentionees:
+		    x = []
+		    x.append(event.message.text.split(" ")[-1])
+		    print(event.message.text.split(" "))
+		    x.append(0)
+		    team[i.user_id] = x
+		    if x[0] not in totalTeams:
+		        totalTeams.append(x[0])
+	        season[event.message.text.split(" ")[-1]] = [1000, 0]
         if event.message.text == "!stat" or event.message.text == "!stats" or event.message.text == "!Stat" or event.message.text == "!Stats":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(season)))
         if event.message.text == "!start season":
