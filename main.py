@@ -106,7 +106,6 @@ def handle_message(event):
         name = line_bot_api.get_profile(event.source.user_id).display_name
     except LineBotApiError:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Since like you didn't add the bot as friend, so https://lin.ee/5M1merW is the link to adding friend, please add it quickly."))
-    print(user)
 	name = user
     if event.message.text.split(" ")[0] == "!toggle":
         if user == "U4e5ae01224117b28f662c288775be0a7":
