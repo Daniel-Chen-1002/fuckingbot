@@ -219,16 +219,20 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
             if event.message.text == "bitch" or event.message.text == "Bitch":
-                try:
-                    reply = []
-                    if random.random()<math.log(100-season[team[user][0]][1]):
-                        season[team[user][0]][1] = season[team[user][0]][1]+1
-                        reply.append(TextSendMessage(text="Congrats, "+name+", you successfully hired a bitch for your team."))
-                    else:
-                        reply.append(TextSendMessage(text="Hahaha "+name+" the bitch doesn't like you!"))
-                    line_bot_api.reply_message(event.reply_token, reply)
-                except KeyError:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
+                if time.time()-team[user][1]>1800:
+                    try:
+                        reply = []
+                        if random.random()<math.log(100-season[team[user][0]][1]):
+                            season[team[user][0]][1] = season[team[user][0]][1]+1
+                            reply.append(TextSendMessage(text="Congrats, "+name+", you successfully hired a bitch for your team."))
+                        else:
+                            reply.append(TextSendMessage(text="Hahaha "+name+" the bitch doesn't like you!"))
+                        line_bot_api.reply_message(event.reply_token, reply)
+                    except KeyError:
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
+                    team[user][1] == time.time()
+                else:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str((time.time()-team[user][1])//60)+"M "+str((time.time()-team[user][1])%60//1)+"S to do so."))
             if event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck":
                 try:
                     reply = []
@@ -239,29 +243,29 @@ def handle_message(event):
                                     stole = random.randint(0, 400, 2)
                                     season[team[user][0]][0]+=stole
                                     season[event.message.text.split(" ")[1]][0] -= stole
-                                    reply.append(TextSendMessage(text="💥BOOM!!!💥 YOU FUCKED THE HELL OUTTA "+event.message.text.split(" ")[0]+"'s TEAM!!!"))
+                                    reply.append(TextSendMessage(text="💥BOOM!!!💥 YOU FUCKED THE HELL OUTTA "+event.message.text.split(" ")[1]+"'s TEAM!!!"))
                                     reply.append(TextSendMessage(text="Took extra points of "+str(stole)))
                                 else:
                                     stole = random.randint(0, 200)
                                     season[team[user][0]][0]+=stole
                                     season[event.message.text.split(" ")[1]][0]-=stole
-                                    reply.append(TextSendMessage(text="success! you fucked "+event.message.text.split(" ")[0]+"'s team and get "+str(stole)+" points."))
+                                    reply.append(TextSendMessage(text="success! you fucked "+event.message.text.split(" ")[1]+"'s team and get "+str(stole)+" points."))
                             else:
                                 if random.randint(1, 5) == 1:
                                     stole = random.randint(0, 200)
                                     season[team[user][0]][0]-=stole
                                     season[event.message.text.split(" ")[1]][0] += stole
-                                    reply.append(TextSendMessage(text="You fucked "+event.message.text.split(" ")[0]+"'s team. But your dick was stucked inside them, so your dick was yanked out of you by "+str(season[event.message.text.split(" ")[1]][1])+" bitches, they beat you up and imprisoned you."))
+                                    reply.append(TextSendMessage(text="You fucked "+event.message.text.split(" ")[1]+"'s team. But your dick was stucked inside them, so your dick was yanked out of you by "+str(season[event.message.text.split(" ")[1]][1])+" bitches, they beat you up and imprisoned you."))
                                     reply.append(TextSendMessage(text="Your team paid "+str(stole)+" points for ransom."))
                                 else:
-                                    reply.append(TextSendMessage(text="You tried to fuck "+event.message.text.split(" ")[0]+"'s team. But you've been beaten up and hurled away by "+str(season[event.message.text.split(" ")[1]][1])+" bitches."))
+                                    reply.append(TextSendMessage(text="You tried to fuck "+event.message.text.split(" ")[1]+"'s team. But you've been beaten up and hurled away by "+str(season[event.message.text.split(" ")[1]][1])+" bitches."))
                             team[user][1]=time.time()
                         except AttributeError:
                             reply.append("Fuck you stupid idiot! Decide a team to fuck! Format:fuck theTeamToFuck")
                         
                         
                     else:
-                        reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+(time.time()-team[user][1])//60+"M "+(time.time()-team[user][1])%60//1+"S to fuck again."))
+                        reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str((time.time()-team[user][1])//60)+"M "+str((time.time()-team[user][1])%60//1)+"S to fuck again."))
                     line_bot_api.reply_message(event.reply_token, reply)
                 except KeyError:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
