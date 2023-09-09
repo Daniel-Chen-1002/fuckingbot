@@ -107,6 +107,7 @@ def handle_message(event):
     except LineBotApiError:
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Since like you didn't add the bot as friend, so https://lin.ee/5M1merW is the link to adding friend, please add it quickly."))
     print(user)
+	name = user
     if event.message.text.split(" ")[0] == "!toggle":
         if user == "U4e5ae01224117b28f662c288775be0a7":
             toggle = event.message.text.split(" ")[1]
@@ -210,7 +211,10 @@ def handle_message(event):
                     
                     for j in range(len(team)):
                         if team[key[j]][0] == totalTeams[i]:
-                            member.append(line_bot_api.get_profile(key[j]).display_name)
+			    try:
+        			member.append(line_bot_api.get_profile(key[j]).display_name)
+    			    except LineBotApiError:
+                                member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
@@ -279,13 +283,7 @@ def handle_message(event):
     #reply = 'You said: ' + text
     #line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
     
-    
-    print(reply_msg)
 
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=reply_msg)
-    )
 
 
 
