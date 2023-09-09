@@ -232,7 +232,7 @@ def handle_message(event):
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                     team[user][1] == time.time()
                 else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str((time.time()-team[user][1])//60)+"M "+str((time.time()-team[user][1])%60//1)+"S to do so."))
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
             if event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck":
                 try:
                     reply = []
@@ -265,7 +265,7 @@ def handle_message(event):
                         
                         
                     else:
-                        reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str((time.time()-team[user][1])//60)+"M "+str((time.time()-team[user][1])%60//1)+"S to fuck again."))
+                        reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to fuck again."))
                     line_bot_api.reply_message(event.reply_token, reply)
                 except KeyError:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
