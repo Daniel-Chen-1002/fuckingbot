@@ -271,14 +271,16 @@ def handle_message(event):
                     team[user][1] == time.time()
                 else:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
-            if time.time()-team[user][2]<=10 and normal(user)==True:
-                if event.message.text == "fuck" or event.message.text == "Fuck":
-                    team[user][3]+=5
-            elif time.time()-team[user][2]>10 and team[user][3]!=0:
-                season[team[user][0]][0]+=team[user][3]
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team."))
-                team[user][3]==0
-            elif event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck":
+            if normal(user)==True:
+                if time.time()-team[user][2]<=10:
+                    if event.message.text == "fuck" or event.message.text == "Fuck":
+                        team[user][3]+=5
+                elif time.time()-team[user][2]>10 and team[user][3]!=0:
+                    season[team[user][0]][0]+=team[user][3]
+                    fb.put(url, data=season, name="season")
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team."))
+                    team[user][3]==0
+            if event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck":
                 try:
                     reply = []
                     special = 0
