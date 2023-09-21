@@ -106,6 +106,12 @@ def handle_message(event):
     global seasontime
     group = event.source.group_id
     user = event.source.user_id
+    def normal(user):
+        try:
+            team[user]
+            return True
+        except KeyError:
+            return False
     try:
         name = line_bot_api.get_profile(event.source.user_id).display_name
     except LineBotApiError:
@@ -230,6 +236,8 @@ def handle_message(event):
                 if time.time()-team[user][1]>1800:
                     try:
                         reply = []
+                        b = season[team[user][0]][1]
+                        b= int(b)
                         if random.random()<((-1)*(0.00000396)*(b-50)*(b-50)*(b-50)+(-1)*(0.0001)*(b-50)+0.5):
                             season[team[user][0]][1] = season[team[user][0]][1]+1
                             reply.append(TextSendMessage(text="Congrats, "+name+", you successfully hired a bitch for your team."))
@@ -263,7 +271,7 @@ def handle_message(event):
                     team[user][1] == time.time()
                 else:
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
-            if time.time()-team[user][2]<=10:
+            if time.time()-team[user][2]<=10 and normal(user)==True:
                 if event.message.text == "fuck" or event.message.text == "Fuck":
                     team[user][3]+=5
             elif time.time()-team[user][2]>10 and team[user][3]!=0:
