@@ -12,6 +12,10 @@ import random
 import time
 import math
 
+from firebase import firebase
+url = 'https://fuck-ae07c-default-rtdb.firebaseio.com/'
+fb = firebase.FirebaseApplication(url, None)
+
 comp = {}
 boost = {}
 w = []
@@ -226,7 +230,7 @@ def handle_message(event):
                 if time.time()-team[user][1]>1800:
                     try:
                         reply = []
-                        if random.random()<math.log(100-season[team[user][0]][1], 100):
+                        if random.random()<((-1)*(0.00000396)*(b-50)*(b-50)*(b-50)+(-1)*(0.0001)*(b-50)+0.5):
                             season[team[user][0]][1] = season[team[user][0]][1]+1
                             reply.append(TextSendMessage(text="Congrats, "+name+", you successfully hired a bitch for your team."))
                         else:
