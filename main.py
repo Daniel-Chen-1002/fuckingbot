@@ -95,7 +95,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-        global comp
+    global comp
     global w
     global mode
     global toggle
