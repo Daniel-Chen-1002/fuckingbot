@@ -95,7 +95,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global comp
+        global comp
     global w
     global mode
     global toggle
@@ -211,6 +211,8 @@ def handle_message(event):
                         totalTeams.append(x[0])
                 season[event.message.text.split(" ")[-1]] = [100000, 0, 1]
                 fb.put(url, data=season, name="season")
+                fb.put(url, data=team, name="team")
+                fb.put(url, data=totalTeams, name="totalTeams")
         if event.message.text == "stat" or event.message.text == "stats" or event.message.text == "Stat" or event.message.text == "Stats":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(season)))
         if event.message.text == "!start season":
@@ -219,6 +221,26 @@ def handle_message(event):
                 seasontime=time.time()
                 fb.put(url, data=seasontime, name="seasontime")
                 reply.append(TextSendMessage(text="Teams are devide as below:"))
+                key = list(team.keys())
+                for i in range(len(totalTeams)):
+                    member = []
+                    
+                    for j in range(len(team)):
+                        if team[key[j]][0] == totalTeams[i]:
+                            try:
+                                member.append(line_bot_api.get_profile(key[j]).display_name)
+                            except LineBotApiError:
+                                member.append(key[j])
+                    reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
+                line_bot_api.reply_message(event.reply_token, reply)
+        if event.message.text == "!continue season":
+            if user == "U4e5ae01224117b28f662c288775be0a7":
+                reply = []
+                seasontime=fb.get(url+"seasontime/", None)
+                reply.append(TextSendMessage(text="Season continued\nTeams are devide as below:"))
+                season = fb.get(url+"season", None)
+                team = fb.get(url+"team/", None)
+                totalTeams = fb.get(url+"totalTeams/", None)
                 key = list(team.keys())
                 for i in range(len(totalTeams)):
                     member = []
@@ -240,6 +262,7 @@ def handle_message(event):
                         b= int(b)
                         if random.random()<((-1)*(0.00000396)*(b-50)*(b-50)*(b-50)+(-1)*(0.0001)*(b-50)+0.5):
                             season[team[user][0]][1] = season[team[user][0]][1]+1
+                            fb.put(url, data=season, name="season")
                             reply.append(TextSendMessage(text="Congrats, "+name+", you successfully hired a bitch for your team."))
                         else:
                             reply.append(TextSendMessage(text="Hahaha "+name+" the bitch doesn't like you!"))
@@ -259,6 +282,7 @@ def handle_message(event):
                         reply.append(TextSendMessage(text=name+" swallowed a pill of viagra......"))
                         if random.randint():
                             season[team[user][0]][2] = season[team[user][0]][2]+0.02
+                            fb.put(url, data=season, name="season")
                             reply.append(TextSendMessage(text="Got a small boost on his dick."))
                         else:
                             reply.append(TextSendMessage(text="Seems like "+name+" is very bad at chemistry, instead of C22H30N6O4S, he used C22H30N4O2S2. Nothing happened"))
@@ -280,7 +304,7 @@ def handle_message(event):
                     fb.put(url, data=season, name="season")
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team."))
                     team[user][3]==0
-            if event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck":
+            if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 try:
                     reply = []
                     special = 0
@@ -323,7 +347,10 @@ def handle_message(event):
                     team[user][2]==time.time()
                 except KeyError:
                     if user not in totalTeams:
-                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
+                        if user == "U4e5ae01224117b28f662c288775be0a7":
+                            pass
+                        else:
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                     else:
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? TYPE THE CORRECT TEAM!"))
                 
