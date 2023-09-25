@@ -280,7 +280,7 @@ def handle_message(event):
                     try:
                         reply = []
                         reply.append(TextSendMessage(text=name+" swallowed a pill of viagra......"))
-                        if random.randint():
+                        if random.randint(1, 100)>(season[team[user][0]][2]-1)*50:
                             season[team[user][0]][2] = season[team[user][0]][2]+0.02
                             fb.put(url, data=season, name="season")
                             reply.append(TextSendMessage(text="Got a small boost on his dick."))
