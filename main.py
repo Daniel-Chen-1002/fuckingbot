@@ -206,6 +206,7 @@ def handle_message(event):
                     x.append(0)
                     x.append(0)
                     x.append(0)
+                    x.append(0)
                     team[i.user_id] = x
                     if x[0] not in totalTeams:
                         totalTeams.append(x[0])
@@ -234,6 +235,9 @@ def handle_message(event):
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
+        if event.message.text == "help" or event.message.text == "Help":
+                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nothers:\nstat\nhelp")]
+                line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "!continue season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 reply = []
@@ -255,6 +259,29 @@ def handle_message(event):
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
+            if event.message.text.split(" ")[0] == "report" or event.message.text.split(" ")[0] == "Report":
+                season=fb.get(url+"season/", None)
+                if time.time()-team[user][4]>7200:
+                    try:
+                        reply=[]
+                        l = len(totalTeams)
+                        if random.randint(1, l)==1:
+                            team[event.message.mention.mentionees[0]][1]=time.time()+3600
+                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" to the Gender Equality Committee....."))
+                            reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" is put into jail for 2 hours."))
+                        else:
+                            team[user][1]=time.time()+900
+                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" to the Gender Equality Committee....."))
+                            reply.append(TextSendMessage(text="Nope! Seems like "+line_bot_api.get_profile(user).display_name+" wants to fake a crime on "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" but got caught, so is banned for 15 minutes."))
+                        fb.put(url, data=team, name="team")
+                        line_bot_api.reply_message(event.reply_token, reply)
+                    except IndexError:
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you idiot! Report a person by pinging him/her (no her) like report @EthanB"))
+                    except KeyError:
+                        if user not in team.keys():
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
+                        else:
+                            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? REPORT THE RIGHT WAY!"))
             if event.message.text == "bitch" or event.message.text == "Bitch":
                 season = fb.get(url+"season/", None)
                 if time.time()-team[user][1]>1800:
@@ -270,14 +297,14 @@ def handle_message(event):
                             reply.append(TextSendMessage(text="Hahaha "+name+" the bitch doesn't like you!"))
                         line_bot_api.reply_message(event.reply_token, reply)
                     except KeyError:
-                        if user not in totalTeams:
+                        if user not in team.keys():
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? TYPE THE CORRECT TEAM!"))
                     team[user][1]=time.time()
                     fb.put(url+"team/"+user+"/", data=team[user][1], name=1)
                 else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="You little idiot! Your viagra is still under creating. You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to get the pill."))
             if event.message.text == "viagra" or event.message.text == "Viagra":
                 season = fb.get(url+"season/", None)
                 if time.time()-team[user][1]>1800:
@@ -308,7 +335,7 @@ def handle_message(event):
                     season[team[user][0]][0]+=team[user][3]
                     fb.put(url, data=season, name="season")
                     line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team."))
-                    team[user][3]==0
+                    team[user][3]=0
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
                 try:
@@ -350,11 +377,12 @@ def handle_message(event):
                         reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to fuck again."))
                     if special == 1:
                         reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
+                        team[user][2]=time.time()
+                        fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
                     line_bot_api.reply_message(event.reply_token, reply)
-                    team[user][2]==time.time()
-                    fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
+                    
                 except KeyError:
-                    if user not in totalTeams:
+                    if user not in team.keys():
                         if user == "U4e5ae01224117b28f662c288775be0a7":
                             pass
                         else:
