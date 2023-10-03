@@ -273,6 +273,7 @@ def handle_message(event):
                             team[user][1]=time.time()+900
                             reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Nope! Seems like "+line_bot_api.get_profile(user).display_name+" wants to fake a crime on "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" but got caught, so is banned for 15 minutes."))
+                        team[user][4]==time.time()
                         fb.put(url, data=team, name="team")
                         line_bot_api.reply_message(event.reply_token, reply)
                     except IndexError:
