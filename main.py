@@ -236,7 +236,7 @@ def handle_message(event):
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "help" or event.message.text == "Help":
-                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nothers:\nstat\nhelp")]
+                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\nothers:\nstat\nhelp")]
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "!continue season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
@@ -266,12 +266,12 @@ def handle_message(event):
                         reply=[]
                         l = len(totalTeams)
                         if random.randint(1, l)==1:
-                            team[event.message.mention.mentionees[0]][1]=time.time()+3600
-                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" to the Gender Equality Committee....."))
-                            reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" is put into jail for 2 hours."))
+                            team[event.message.mention.mentionees[0].user_id][1]=time.time()+3600
+                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
+                            reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" is put into jail for 1 hours."))
                         else:
                             team[user][1]=time.time()+900
-                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" to the Gender Equality Committee....."))
+                            reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Nope! Seems like "+line_bot_api.get_profile(user).display_name+" wants to fake a crime on "+line_bot_api.get_profile(event.message.mention.mentionees[0]).display_name+" but got caught, so is banned for 15 minutes."))
                         team[user][4]==time.time()
                         fb.put(url, data=team, name="team")
@@ -283,6 +283,8 @@ def handle_message(event):
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                         else:
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? REPORT THE RIGHT WAY!"))
+                else:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="The police needs to take a fucking break too, wait for "+str(int((7200-(time.time()-team[user][1]))//60))+"M "+str(int((7200-(time.time()-team[user][1]))%60//1))+"S to report again."))
             if event.message.text == "bitch" or event.message.text == "Bitch":
                 season = fb.get(url+"season/", None)
                 if time.time()-team[user][1]>1800:
