@@ -24,6 +24,8 @@ team = {}
 totalTeams=[]
 seasontime=0
 mode = "echo"
+bank={}
+banktimer={}
 toggle = "None" #None Competitoin Season
 #################
 #import openai
@@ -103,6 +105,8 @@ def handle_message(event):
     global team
     global boost
     global totalTeams
+    global bank
+    global banktimer
     global seasontime
     group = event.source.group_id
     user = event.source.user_id
@@ -211,12 +215,33 @@ def handle_message(event):
                     if x[0] not in totalTeams:
                         totalTeams.append(x[0])
                 season[event.message.text.split(" ")[-1]] = [100000, 0, 1]
+                bank[event.message.text.split(" ")[-1]] = 0
+                banktimer[event.message.text.split(" ")[-1]] = 0
                 fb.put(url, data=season, name="season")
+                fb.put(url, data=bank, name="bank")
+                fb.put(url, data=banktimer, name="banktimer")
                 fb.put(url, data=team, name="team")
                 fb.put(url, data=totalTeams, name="totalTeams")
         if event.message.text == "stat" or event.message.text == "stats" or event.message.text == "Stat" or event.message.text == "Stats":
             season = fb.get(url+"season/", None)
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(season)))
+        if event.message.text == "Bank" or event.message.text == "bank":
+            bank = fb.get(url+"bank/", None)
+            banktimer=fb.get(url+"banktimer/", None)
+            hours = (time.time()-banktimer)//3600
+            bank[team[user][0]] *= (1.1**hours)
+            banktimer[team[user][0]]+=(3600*hours)
+            fb.put(url, data=bank, name="bank")
+            fb.put(url, data=banktimer, name="banktimer")
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(bank)))
+        if event.message.text == "end season" or event.message.text == "End season":
+            if user == "U4e5ae01224117b28f662c288775be0a7":
+                season = fb.get(url+"season/", None)
+                bank = fb.get(url+"bank/", None)
+                bkey = list(season.keys())
+                out = {}
+                for i in range(len(bkey)):
+                    out[bkey[i]]=season[bkey[i]][0]+bank[bkey[i]]
         if event.message.text == "!start season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 reply = []
@@ -259,6 +284,25 @@ def handle_message(event):
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
+            if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
+                hours = (time.time()-banktimer)//3600
+                bank[team[user][0]] *= (1.1**hours)
+                banktimer[team[user][0]]+=(3600*hours)
+                fb.put(url, data=bank, name="bank")
+                fb.put(url, data=banktimer, name="banktimer")
+                try:
+                    if season[team[user][0]][0] - int(event.message.text.split(" ")[1])>=0:
+                        season[team[user][0]][0] = season[team[user][0]][0] - int(event.message.text.split(" ")[1])
+                        line_bot_api.reply_message(TextSendMessage(text="Successfully deposit "+int(event.message.text.split(" ")[1])+" points"))
+                        banktimer=time.time()
+                        fb.put(url, data=banktimer, name="banktimer")
+                    else:
+                        line_bot_api.reply_message(TextSendMessage(text="Hey yo idiot! You don't have enough points, go fuck someone then come back"))
+                except ValueError:
+                    line_bot_api.reply_message(TextSendMessage(text="Fuck you!!! Are you Ethan? deposit a number!"))
+                except KeyError:
+                    if user!="U4e5ae01224117b28f662c288775be0a7":
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
             if event.message.text.split(" ")[0] == "report" or event.message.text.split(" ")[0] == "Report":
                 season=fb.get(url+"season/", None)
                 if time.time()-team[user][4]>7200:
@@ -266,11 +310,11 @@ def handle_message(event):
                         reply=[]
                         l = len(totalTeams)
                         if random.randint(1, l)==1:
-                            team[event.message.mention.mentionees[0].user_id][1]=time.time()+3600
+                            team[event.message.mention.mentionees[0].user_id][1]=time.time()+1800
                             reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" is put into jail for 1 hours."))
                         else:
-                            team[user][1]=time.time()+900
+                            team[user][1]=time.time()-900
                             reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Nope! Seems like "+line_bot_api.get_profile(user).display_name+" wants to fake a crime on "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" but got caught, so is banned for 15 minutes."))
                         team[user][4]==time.time()
@@ -341,6 +385,8 @@ def handle_message(event):
                     team[user][3]=0
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
+                bank = fb.get(url+"bank/", None)
+                banktimer = fb.get(url+"banktimer/", None)
                 try:
                     reply = []
                     special = 0
@@ -392,7 +438,18 @@ def handle_message(event):
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                     else:
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? TYPE THE CORRECT TEAM!"))
-                
+            for i in range(len(list(season.keys()))):
+                k=list(season.keys())
+                if season[k[i]][0]<0:
+                    miss=0-season[k[i]][0]
+                    hours = (time.time()-banktimer)//3600
+                    bank[k[i]] *= (1.1**hours)
+                    bank[k[i]]-=miss
+                    banktimer[k[i]]=time.time()
+                    season[k[i]][0]==0
+                    fb.put(url, data=bank, name="bank")
+                    fb.put(url, data=banktimer, name="banktimer")
+                    fb.put(url, data=season, name="season")
         else:
             if seasontime!=0:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Season has ended, please contact the administrator to announce the result or use !stat command to see it yourself."))
