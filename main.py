@@ -230,7 +230,7 @@ def handle_message(event):
             banktimer=fb.get(url+"banktimer/", None)
             for i in list(bank.keys()):
                 hours = int((time.time()-banktimer[i])//3600)
-                for i in range(hours):
+                for j in range(hours):
                     bank[i] *= 1.1
                 banktimer[i]+=(3600*hours)
             fb.put(url, data=bank, name="bank")
@@ -446,7 +446,7 @@ def handle_message(event):
                 if season[k[i]][0]<0:
                     miss=0-season[k[i]][0]
                     hours = int((time.time()-banktimer)//3600)
-                    for i in range(hours):
+                    for j in range(hours):
                         bank[k[i]] *= 1.1
                     bank[k[i]]-=miss*2
                     banktimer[k[i]]=time.time()
