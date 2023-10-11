@@ -228,9 +228,10 @@ def handle_message(event):
         if event.message.text == "Bank" or event.message.text == "bank":
             bank = fb.get(url+"bank/", None)
             banktimer=fb.get(url+"banktimer/", None)
-            hours = (time.time()-banktimer[team[user][0]])//3600
-            bank[team[user][0]] *= (1.1**hours)
-            banktimer[team[user][0]]+=(3600*hours)
+            for i in list(bank.keys()):
+                hours = (time.time()-banktimer[i])//3600
+                bank[i] *= (1.1**hours)
+                banktimer[i]+=(3600*hours)
             fb.put(url, data=bank, name="bank")
             fb.put(url, data=banktimer, name="banktimer")
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(bank)))
@@ -444,7 +445,7 @@ def handle_message(event):
                     miss=0-season[k[i]][0]
                     hours = (time.time()-banktimer)//3600
                     bank[k[i]] *= (1.1**hours)
-                    bank[k[i]]-=miss
+                    bank[k[i]]-=miss*2
                     banktimer[k[i]]=time.time()
                     season[k[i]][0]==0
                     fb.put(url, data=bank, name="bank")
