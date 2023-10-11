@@ -228,7 +228,7 @@ def handle_message(event):
         if event.message.text == "Bank" or event.message.text == "bank":
             bank = fb.get(url+"bank/", None)
             banktimer=fb.get(url+"banktimer/", None)
-            hours = (time.time()-banktimer)//3600
+            hours = (time.time()-banktimer[team[user][0]])//3600
             bank[team[user][0]] *= (1.1**hours)
             banktimer[team[user][0]]+=(3600*hours)
             fb.put(url, data=bank, name="bank")
@@ -396,21 +396,21 @@ def handle_message(event):
                                 if random.randint(1, 100)==50:
                                     special = 1
                                 if random.randint(1, 20) == 1:
-                                    stole = random.randint(0, 200)*200*season[team[user][0]][2]
+                                    stole = int(random.randint(0, 200)*200*season[team[user][0]][2])
                                     season[team[user][0]][0]+=stole
                                     season[event.message.text.split(" ")[1]][0] -= stole
                                     reply.append(TextSendMessage(text="💥BOOM!!!💥 YOU FUCKED THE HELL OUTTA "+event.message.text.split(" ")[1]+"'s TEAM!!!"))
                                     reply.append(TextSendMessage(text="Took extra points of "+str(stole)))
                                     fb.put(url, data=season, name="season")
                                 else:
-                                    stole = random.randint(0, 200)*100*season[team[user][0]][2]
+                                    stole = int(random.randint(0, 200)*100*season[team[user][0]][2])
                                     season[team[user][0]][0]+=stole
                                     season[event.message.text.split(" ")[1]][0]-=stole
                                     reply.append(TextSendMessage(text="success! you fucked "+event.message.text.split(" ")[1]+"'s team and get "+str(stole)+" points."))
                                     fb.put(url, data=season, name="season")
                             else:
                                 if random.randint(1, 5) == 1:
-                                    stole = random.randint(0, 200)
+                                    stole = int(random.randint(0, 200))
                                     season[team[user][0]][0]-=stole
                                     season[event.message.text.split(" ")[1]][0] += stole
                                     reply.append(TextSendMessage(text="You fucked "+event.message.text.split(" ")[1]+"'s team. But your dick was stucked inside them, so your dick was yanked out of you by "+str(season[event.message.text.split(" ")[1]][1])+" bitches, they beat you up and imprisoned you."))
