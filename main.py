@@ -263,7 +263,7 @@ def handle_message(event):
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "help" or event.message.text == "Help":
-                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\nothers:\nstat\nhelp")]
+                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\n\nothers:\nstat\nbank\ndeposit\nhelp")]
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "!continue season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
@@ -287,7 +287,7 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
-                hours = int((time.time()-banktimer)//3600)
+                hours = int((time.time()-banktimer[team[user][0]])//3600)
                 for i in range(hours):
                     bank[team[user][0]] *= 1.1
                 banktimer[team[user][0]]+=(3600*hours)
