@@ -229,7 +229,7 @@ def handle_message(event):
             bank = fb.get(url+"bank/", None)
             banktimer=fb.get(url+"banktimer/", None)
             for i in list(bank.keys()):
-                hours = (time.time()-banktimer[i])//3600
+                hours = int((time.time()-banktimer[i])//3600)
                 for i in range(hours):
                     bank[i] *= 1.1
                 banktimer[i]+=(3600*hours)
@@ -243,7 +243,7 @@ def handle_message(event):
                 bkey = list(season.keys())
                 out = {}
                 for i in range(len(bkey)):
-                    out[bkey[i]]=season[bkey[i]][0]+bank[bkey[i]]
+                    out[bkey[i]]=int(season[bkey[i]][0]+bank[bkey[i]])
         if event.message.text == "!start season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 reply = []
@@ -287,7 +287,7 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, reply)
         if time.time()-seasontime<1209600:
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
-                hours = (time.time()-banktimer)//3600
+                hours = int((time.time()-banktimer)//3600)
                 for i in range(hours):
                     bank[team[user][0]] *= 1.1
                 banktimer[team[user][0]]+=(3600*hours)
@@ -445,7 +445,7 @@ def handle_message(event):
                 k=list(season.keys())
                 if season[k[i]][0]<0:
                     miss=0-season[k[i]][0]
-                    hours = (time.time()-banktimer)//3600
+                    hours = int((time.time()-banktimer)//3600)
                     for i in range(hours):
                         bank[k[i]] *= 1.1
                     bank[k[i]]-=miss*2
