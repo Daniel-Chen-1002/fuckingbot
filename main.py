@@ -230,7 +230,8 @@ def handle_message(event):
             banktimer=fb.get(url+"banktimer/", None)
             for i in list(bank.keys()):
                 hours = (time.time()-banktimer[i])//3600
-                bank[i] *= (1.1**hours)
+                for i in range(hours):
+                    bank[i] *= 1.1
                 banktimer[i]+=(3600*hours)
             fb.put(url, data=bank, name="bank")
             fb.put(url, data=banktimer, name="banktimer")
@@ -287,7 +288,8 @@ def handle_message(event):
         if time.time()-seasontime<1209600:
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
                 hours = (time.time()-banktimer)//3600
-                bank[team[user][0]] *= (1.1**hours)
+                for i in range(hours):
+                    bank[team[user][0]] *= 1.1
                 banktimer[team[user][0]]+=(3600*hours)
                 fb.put(url, data=bank, name="bank")
                 fb.put(url, data=banktimer, name="banktimer")
@@ -444,7 +446,8 @@ def handle_message(event):
                 if season[k[i]][0]<0:
                     miss=0-season[k[i]][0]
                     hours = (time.time()-banktimer)//3600
-                    bank[k[i]] *= (1.1**hours)
+                    for i in range(hours):
+                        bank[k[i]] *= 1.1
                     bank[k[i]]-=miss*2
                     banktimer[k[i]]=time.time()
                     season[k[i]][0]==0
