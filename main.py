@@ -297,7 +297,7 @@ def handle_message(event):
                     if season[team[user][0]][0] - int(event.message.text.split(" ")[1])>=0:
                         season[team[user][0]][0] = season[team[user][0]][0] - int(event.message.text.split(" ")[1])
                         line_bot_api.reply_message(TextSendMessage(text="Successfully deposit "+int(event.message.text.split(" ")[1])+" points"))
-                        banktimer=time.time()
+                        banktimer[team[user][0]]=time.time()
                         fb.put(url, data=banktimer, name="banktimer")
                     else:
                         line_bot_api.reply_message(TextSendMessage(text="Hey yo idiot! You don't have enough points, go fuck someone then come back"))
