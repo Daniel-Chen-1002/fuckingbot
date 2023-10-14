@@ -299,13 +299,13 @@ def handle_message(event):
                 try:
                     if season[team[user][0]][0] - int(event.message.text.split(" ")[1])>=0:
                         season[team[user][0]][0] = season[team[user][0]][0] - int(event.message.text.split(" ")[1])
-                        line_bot_api.reply_message(TextSendMessage(text="Successfully deposit "+str(int(event.message.text.split(" ")[1]))+" points"))
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Successfully deposit "+str(int(event.message.text.split(" ")[1]))+" points"))
                         banktimer[team[user][0]]=time.time()
                         fb.put(url, data=banktimer, name="banktimer")
                     else:
-                        line_bot_api.reply_message(TextSendMessage(text="Hey yo idiot! You don't have enough points, go fuck someone then come back"))
+                        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Hey yo idiot! You don't have enough points, go fuck someone then come back"))
                 except ValueError:
-                    line_bot_api.reply_message(TextSendMessage(text="Fuck you!!! Are you Ethan? deposit a number!"))
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you!!! Are you Ethan? deposit a number!"))
                 except KeyError:
                     if user!="U4e5ae01224117b28f662c288775be0a7":
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
