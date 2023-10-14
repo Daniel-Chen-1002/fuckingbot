@@ -458,7 +458,7 @@ def handle_message(event):
                         bank[k[i]] *= 1.1
                     bank[k[i]]-=miss*2
                     banktimer[k[i]]=time.time()
-                    season[k[i]][0]==0
+                    season[k[i]][0]=0
                     fb.put(url, data=bank, name="bank")
                     fb.put(url, data=banktimer, name="banktimer")
                     fb.put(url, data=season, name="season")
