@@ -447,8 +447,8 @@ def handle_message(event):
                     else:
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? TYPE THE CORRECT TEAM!"))
             season = fb.get(url+"season/", None)
-            banktimer = fb.get(url+"season/", None)
-            bank = fb.get(url+"season/", None)
+            banktimer = fb.get(url+"banktimer/", None)
+            bank = fb.get(url+"bank/", None)
             for i in range(len(list(season.keys()))):
                 k=list(season.keys())
                 if season[k[i]][0]<0:
