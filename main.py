@@ -446,6 +446,9 @@ def handle_message(event):
                             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="you are not in this season, please sign up for the next season to join."))
                     else:
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Stop right there. Is your brain dead or hand broken? TYPE THE CORRECT TEAM!"))
+            season = fb.get(url+"season/", None)
+            banktimer = fb.get(url+"season/", None)
+            bank = fb.get(url+"season/", None)
             for i in range(len(list(season.keys()))):
                 k=list(season.keys())
                 if season[k[i]][0]<0:
