@@ -302,6 +302,7 @@ def handle_message(event):
                         bank[team[user][0]]+=int(event.message.text.split(" ")[1])
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Successfully deposit "+str(int(event.message.text.split(" ")[1]))+" points"))
                         banktimer[team[user][0]]=time.time()
+                        fb.put(url, data=season, name="season")
                         fb.put(url, data=bank, name="bank")
                         fb.put(url, data=banktimer, name="banktimer")
                     else:
