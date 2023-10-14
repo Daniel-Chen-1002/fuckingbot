@@ -450,7 +450,7 @@ def handle_message(event):
                 k=list(season.keys())
                 if season[k[i]][0]<0:
                     miss=0-season[k[i]][0]
-                    hours = int((time.time()-banktimer)//3600)
+                    hours = int((time.time()-banktimer[k[i]])//3600)
                     for j in range(hours):
                         bank[k[i]] *= 1.1
                     bank[k[i]]-=miss*2
