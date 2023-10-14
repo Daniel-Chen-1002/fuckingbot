@@ -302,6 +302,7 @@ def handle_message(event):
                         bank[team[user][0]]+=int(event.message.text.split(" ")[1])
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Successfully deposit "+str(int(event.message.text.split(" ")[1]))+" points"))
                         banktimer[team[user][0]]=time.time()
+                        fb.put(url, data=bank, name="bank")
                         fb.put(url, data=banktimer, name="banktimer")
                     else:
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Hey yo idiot! You don't have enough points, go fuck someone then come back"))
@@ -315,8 +316,7 @@ def handle_message(event):
                 if time.time()-team[user][4]>7200:
                     try:
                         reply=[]
-                        l = len(totalTeams)
-                        if random.randint(1, l)==1:
+                        if random.randint(1, 2)==1:
                             team[event.message.mention.mentionees[0].user_id][1]=time.time()+1800
                             reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" is put into jail for 1 hours."))
