@@ -299,6 +299,7 @@ def handle_message(event):
                 try:
                     if season[team[user][0]][0] - int(event.message.text.split(" ")[1])>=0:
                         season[team[user][0]][0] = season[team[user][0]][0] - int(event.message.text.split(" ")[1])
+                        bank[team[user][0]]+=int(event.message.text.split(" ")[1])
                         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Successfully deposit "+str(int(event.message.text.split(" ")[1]))+" points"))
                         banktimer[team[user][0]]=time.time()
                         fb.put(url, data=banktimer, name="banktimer")
