@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-
-import logging
-from linebot import LineBotApi, WebhookParser, WebhookHandler
+from flask import Flask, request, abort
+from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextMessage
-from linebot.models import TextSendMessage
-import os
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
-from flask import Flask, request
 import random
 import time
 import math
@@ -16,83 +11,37 @@ from firebase import firebase
 url = 'https://fuck-ae07c-default-rtdb.firebaseio.com/'
 fb = firebase.FirebaseApplication(url, None)
 
+app = Flask(__name__)
+line_bot_api = LineBotApi('nfX/V4p/OO1N9b85uLXlAwJjFCTFrZVns0ujsKwO9XAqDyDos0Ws/Z3zKIV3aG7SzPWOFXdVll9WEiROWsd/voQCYrhwpR65dHfu5Jb3OTLThMTiVxwopIKKRDD0kHy5Q+CXyTdzI8uxnDvlZfKSaAdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('7c883d50fe75288c115e9a7e111b6012')
 comp = {}
 boost = {}
 w = []
 season = {}
 team = {}
-totalTeams=[]
+totalTeams=["U4e5ae01224117b28f662c288775be0a7"]
 seasontime=0
-mode = "echo"
-bank={}
+bank = {}
 banktimer={}
+mode = "echo"
 toggle = "None" #None Competitoin Season
-#################
-#import openai
-	
-#openai.api_key = os.getenv("OPENAI_API_KEY")
-line_bot_api = LineBotApi(os.getenv("LINE_CHANNEL_ACCESS_TOKEN"))
-#parser = WebhookParser(os.getenv("LINE_CHANNEL_SECRET"))
-handler = WebhookHandler(os.getenv("LINE_CHANNEL_SECRET")) 
-
-'''
-conversation = []
-
-#class ChatGPT:  
-    
-
-#    def __init__(self):
-        
-#        self.messages = conversation
-#        self.model = os.getenv("OPENAI_MODEL", default = "gpt-3.5-turbo")
 
 
-
-    def get_response(self, user_input):
-        conversation.append({"role": "user", "content": user_input})
-        
-
-        response = openai.ChatCompletion.create(
-	            model=self.model,
-                messages = self.messages
-
-                )
-
-        conversation.append({"role": "assistant", "content": response['choices'][0]['message']['content']})
-        
-        print("AI回答內容：")        
-        print(response['choices'][0]['message']['content'].strip())
-
-
-        
-        return response['choices'][0]['message']['content'].strip()
-	
-
-
-
-#chatgpt = ChatGPT()
-'''
-
-app = Flask(__name__)
-#run_with_ngrok(app)   #starts ngrok when the app is run
-
-@app.route("/")
-def hello():
-	return "Hello World from Flask in a uWSGI Nginx Docker container with \
-	     Python 3.8 (from the example template)"
-         
-@app.route("/callback", methods=['POST'])
+@app.route('/callback', methods=['POST'])
 def callback():
-    # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-    # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    # handle webhook body
+
+    app.logger.info('Request body: ' + body)
+
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
+    except Exception as e:
+        app.logger.exception('Error occurred: ' + str(e))
+        abort(500)
+
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -201,6 +150,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(comp)))
             w.pop()
     if toggle == "Season":
+        day = 0
         if event.message.text.split(" ")[0] == "!join":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 for i in event.message.mention.mentionees:
@@ -231,7 +181,7 @@ def handle_message(event):
             for i in list(bank.keys()):
                 hours = int((time.time()-banktimer[i])//3600)
                 for j in range(hours):
-                    bank[i] *= 1.1
+                    bank[i] *= 1.005
                 banktimer[i]+=(3600*hours)
             fb.put(url, data=bank, name="bank")
             fb.put(url, data=banktimer, name="banktimer")
@@ -244,8 +194,9 @@ def handle_message(event):
                 out = {}
                 for i in range(len(bkey)):
                     out[bkey[i]]=int(season[bkey[i]][0]+bank[bkey[i]])
-        if event.message.text == "!start season":
+        if event.message.text.split("n")[0] == "!start seaso":
             if user == "U4e5ae01224117b28f662c288775be0a7":
+                day = int(event.message.text.split(" ")[-1])
                 reply = []
                 seasontime=time.time()
                 fb.put(url, data=seasontime, name="seasontime")
@@ -261,9 +212,11 @@ def handle_message(event):
                             except LineBotApiError:
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you bitch you fucking dare impersonate the head mod u idiot cerebral palsy down syndrome whore"))
+            else:
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "help" or event.message.text == "Help":
-                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\n\nothers:\nstat\nbank\ndeposit\nhelp")]
+                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\ncondom\n\nothers:\nstat\nbank\ndeposit\nhelp")]
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text == "!continue season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
@@ -285,7 +238,7 @@ def handle_message(event):
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
-        if time.time()-seasontime<1209600:
+        if time.time()-seasontime<day*60*60*24:
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
                 bank = fb.get(url+"bank/", None)
                 banktimer = fb.get(url+"banktimer/", None)
@@ -359,7 +312,7 @@ def handle_message(event):
                     team[user][1]=time.time()
                     fb.put(url+"team/"+user+"/", data=team[user][1], name=1)
                 else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="You little idiot! Your viagra is still under creating. You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to get the pill."))
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
             if event.message.text == "viagra" or event.message.text == "Viagra":
                 season = fb.get(url+"season/", None)
                 if time.time()-team[user][1]>1800:
@@ -371,7 +324,7 @@ def handle_message(event):
                             fb.put(url, data=season, name="season")
                             reply.append(TextSendMessage(text="Got a small boost on his dick."))
                         else:
-                            reply.append(TextSendMessage(text="Seems like "+name+" is very bad at chemistry, instead of C22H30N6O4S, he used C22H30N4O2S2. Nothing happened"))
+                            reply.append(TextSendMessage(text="Seems like "+name+" is very bad at chemistry, "+name+" uses the wrong ingredients. Nothing happened"))
                         line_bot_api.reply_message(event.reply_token, reply)
                     except KeyError:
                         if user not in totalTeams:
@@ -381,7 +334,7 @@ def handle_message(event):
                     team[user][1] = time.time()
                     fb.put(url+"team/"+user+"/", data=team[user][1], name=1)
                 else:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you son of a bitch, why are you in such a hurry to throw your mother to the other team? You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to do so."))
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="You little idiot! Your viagra is still creating. You need to wait for "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to get the pill."))
             if normal(user)==True:
                 if time.time()-team[user][2]<=10:
                     if event.message.text == "fuck" or event.message.text == "Fuck":
@@ -395,9 +348,9 @@ def handle_message(event):
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
                 banktimer = fb.get(url+"banktimer/", None)
+                special = 0
                 try:
                     reply = []
-                    special = 0
                     if time.time()-team[user][1]>1800:
                         try:
                             if random.randint(1, 100)>season[event.message.text.split(" ")[1]][1]:
@@ -433,11 +386,11 @@ def handle_message(event):
                     else:
                         reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to fuck again."))
                     if special == 1:
+                        print("nigga")
                         reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
                         team[user][2]=time.time()
                         fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
-                    line_bot_api.reply_message(event.reply_token, reply)
-                    
+                    line_bot_api.reply_message(event.reply_token, reply)         
                 except KeyError:
                     if user not in team.keys():
                         if user == "U4e5ae01224117b28f662c288775be0a7":
@@ -479,12 +432,6 @@ def handle_message(event):
     #text = event.message.text
     #reply = 'You said: ' + text
     #line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
-    
-
-
-
-
-
-
 if __name__ == '__main__':
-	    app.run(debug=True, port=os.getenv("PORT", default=5000))
+    app.run()
+
