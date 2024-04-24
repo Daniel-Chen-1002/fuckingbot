@@ -212,9 +212,9 @@ def handle_message(event):
                             except LineBotApiError:
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you bitch you fucking dare impersonate the head mod u idiot cerebral palsy down syndrome whore"))
-            else:
                 line_bot_api.reply_message(event.reply_token, reply)
+            else:
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you bitch you fucking dare impersonate the head mod u idiot cerebral palsy down syndrome whore"))
         if event.message.text == "help" or event.message.text == "Help":
                 reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\ncondom\n\nothers:\nstat\nbank\ndeposit\nhelp")]
                 line_bot_api.reply_message(event.reply_token, reply)
