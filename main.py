@@ -252,8 +252,7 @@ def handle_message(event):
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
         if (time.time()-seasontime)<(day*60*60*24):
-            print("length:"+str(day*60*60*24))
-            print("Now:"+str(time.time()-seasontime))
+            
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
                 bank = fb.get(url+"bank/", None)
                 banktimer = fb.get(url+"banktimer/", None)
@@ -432,6 +431,8 @@ def handle_message(event):
                     fb.put(url, data=season, name="season")
         else:
             if seasontime!=0:
+                print("length:"+str(day*60*60*24))
+                print("Now:"+str(time.time()-seasontime))
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Season has ended, please contact the administrator to announce the result or use !stat command to see it yourself."))
     print(group)
     if group == "C4b8e02e1ef606a620c7d5e8fd03a4824":
