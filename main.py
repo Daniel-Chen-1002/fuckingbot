@@ -212,6 +212,7 @@ def handle_message(event):
                             except LineBotApiError:
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
+                reply.append(TextSendMessage(text="Duration: "+str(day)+" days"))
                 line_bot_api.reply_message(event.reply_token, reply)
             else:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you bitch you fucking dare impersonate the head mod u idiot cerebral palsy down syndrome whore"))
