@@ -251,7 +251,7 @@ def handle_message(event):
                                 member.append(key[j])
                     reply.append(TextSendMessage(text=totalTeams[i]+" : "+str(member)))
                 line_bot_api.reply_message(event.reply_token, reply)
-        if time.time()-seasontime<day*60*60*24:
+        if (time.time()-seasontime)<(day*60*60*24):
             print("length:"+str(day*60*60*24))
             print("Now:"+str(time.time()-seasontime))
             if event.message.text.split(" ")[0] == "deposit" or event.message.text.split(" ")[0] == "Deposit":
