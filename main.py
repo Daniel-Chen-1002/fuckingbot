@@ -25,6 +25,8 @@ bank = {}
 banktimer={}
 mode = "echo"
 toggle = "None" #None Competitoin Season
+day = 0
+get_day = False
 
 
 @app.route('/callback', methods=['POST'])
@@ -57,6 +59,8 @@ def handle_message(event):
     global bank
     global banktimer
     global seasontime
+    global day
+    global get_day
     group = event.source.group_id
     user = event.source.user_id
     def normal(user):
@@ -150,7 +154,6 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(comp)))
             w.pop()
     if toggle == "Season":
-        day = int(fb.get(url+"day/", None))
         if event.message.text.split(" ")[0] == "!join":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 for i in event.message.mention.mentionees:
@@ -196,11 +199,12 @@ def handle_message(event):
                     out[bkey[i]]=int(season[bkey[i]][0]+bank[bkey[i]])
         if event.message.text.split("n")[0] == "!start seaso":
             if user == "U4e5ae01224117b28f662c288775be0a7":
+                get_day = True
+                fb.put(url, data=day, name="day")
                 day = int(event.message.text.split(" ")[-1])
                 reply = []
                 seasontime=time.time()
                 fb.put(url, data=seasontime, name="seasontime")
-                fb.put(url, data=day, name="day")
                 reply.append(TextSendMessage(text="Teams are devide as below:"))
                 key = list(team.keys())
                 for i in range(len(totalTeams)):
