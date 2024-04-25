@@ -216,8 +216,20 @@ def handle_message(event):
             else:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Fuck you bitch you fucking dare impersonate the head mod u idiot cerebral palsy down syndrome whore"))
         if event.message.text == "help" or event.message.text == "Help":
-                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\nreport\ncondom\n\nothers:\nstat\nbank\ndeposit\nhelp")]
+                reply=[TextSendMessage(text="Commands list:"), TextSendMessage(text="Main:\nfuck\nbitch\nviagra\ncondom\nreport\n\nothers:\nstat\nbank\ndeposit\nhelp")]
                 line_bot_api.reply_message(event.reply_token, reply)
+        if event.message.text.split(" ")[0] == "help" or event.message.text.split(" ")[0] == "Help":
+            topic = event.message.text.split(" ")[1]
+            topicList={"fuck":"Fuck other team\nSteals points (0~)from other team ",
+                       "bitch":"wait",
+                       "viagra":"wait",
+                       "condom":"wait",
+                       "report":"Reports other player\n??"+"%"+" chance to success\nSuccess: banning opponent for 1 hour\nFail: banning yourself for 15 minutes\nSyntax: report [opponent]",
+                       "stat":"Check the current point status of every team\nSyntax: stat",
+                       "bank":"A place to store points, can only deposit\nPoints multiplies by 1.005 every hour\nSyntax: bank",
+                       "deposit":"Deposits points into the bank\nSyntax: deposit [amount]"
+                       }
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=topicList[topic]))
         if event.message.text == "!continue season":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 reply = []
