@@ -420,8 +420,8 @@ def handle_message(event):
                     if special == 1:
                         print("nigga")
                         #reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
-                        #team[user][2]=time.time()
-                        #fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
+                        team[user][2]=time.time()
+                        fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
                     line_bot_api.reply_message(event.reply_token, reply)         
                 except KeyError:
                     if user not in team.keys():
