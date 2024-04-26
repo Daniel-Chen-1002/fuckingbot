@@ -380,7 +380,7 @@ def handle_message(event):
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
                 banktimer = fb.get(url+"banktimer/", None)
-                special = 0
+                special = 1
                 try:
                     reply = []
                     if time.time()-team[user][1]>1800:
