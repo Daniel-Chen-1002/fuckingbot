@@ -78,7 +78,7 @@ def handle_message(event):
     if event.message.text.split(" ")[0] == "!toggle":
         if user == "U4e5ae01224117b28f662c288775be0a7":
             toggle[event.message.text.split(" ")[1]].append(str(group))
-            reply = [TextSendMessage(text="Successfully toggle to "+toggle), TextSendMessage(text="group ID: "+str(group))]
+            reply = [TextSendMessage(text="Successfully toggle to "+event.message.text.split(" ")[1]), TextSendMessage(text="group ID: "+str(group))]
             line_bot_api.reply_message(event.reply_token, reply)
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="fuck you cheater"))
