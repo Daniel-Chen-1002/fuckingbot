@@ -63,6 +63,7 @@ def handle_message(event):
     global get_day
     group = event.source.group_id
     user = event.source.user_id
+    seasontime=fb.get(url+"seasontime/", None)
     def normal(user):
         try:
             team[user]
@@ -77,6 +78,10 @@ def handle_message(event):
     print(user)
     if event.message.text.split(" ")[0] == "!toggle":
         if user == "U4e5ae01224117b28f662c288775be0a7":
+            for i in list(toggle.keys()):
+                if str(group) in toggle[i]:
+                    toggle[i].remove(str(group))
+                    break
             toggle[event.message.text.split(" ")[1]].append(str(group))
             reply = [TextSendMessage(text="Successfully toggle to "+event.message.text.split(" ")[1]), TextSendMessage(text="group ID: "+str(group))]
             line_bot_api.reply_message(event.reply_token, reply)
@@ -359,14 +364,18 @@ def handle_message(event):
                 team[user][1] = time.time()
                 fb.put(url+"team/"+user+"/", data=team[user][1], name=1)
             if normal(user)==True:
+                team[user][2] = int(fb.get(url+"team/"+user+"/2/", None))
                 if time.time()-team[user][2]<=10:
                     if event.message.text == "fuck" or event.message.text == "Fuck":
                         team[user][3]+=5
+                        print("get")
                 elif time.time()-team[user][2]>10 and team[user][3]!=0:
                     season[team[user][0]][0]+=team[user][3]
                     fb.put(url, data=season, name="season")
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team."))
+                    reply = TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team.")
                     team[user][3]=0
+                    print("end")
+                    line_bot_api.reply_message(event.reply_token, reply)
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
@@ -443,13 +452,27 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Season has ended, please contact the administrator to announce the result or use !stat command to see it yourself."))
     print(group)
     if group in toggle["Debug"]:
-        pass
+        if user == "U4e5ae01224117b28f662c288775be0a7":
+            if event.message.text.split(" ")[0] == "!display":
+                day = fb.get(url+"day/", None)
+                all = fb.get(url, None)
+                t = fb.get(url+"team/", None)
+                displayList = {"help":"ctime: current time\nttime: total time\nseason: all info in season\nteam: all info in team\ntoggle: current toggles",
+                               "ctime":time.time()-seasontime,
+                               "ttime":day*60*60*24,
+                               "season":all,
+                               "team":t,
+                               "toggle":toggle
+                               }
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=displayList[event.message.text.split(" ")[-1]]))
     if group == "C4b8e02e1ef606a620c7d5e8fd03a4824":
-        if event.message.text=="mode fuck":
-            mode = "fuck"
-        elif event.message.text == "mode echo":
-            mode = "echo"
-
+        if user == "U4e5ae01224117b28f662c288775be0a7":
+            if event.message.text=="mode fuck":
+                mode = "fuck"
+            elif event.message.text == "mode echo":
+                mode = "echo"
+        else:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="FUCK YOU!!!HAHA YOU IDIOT HOW DARE YOU TRY CHANGING MY COMMANDS"))
         if mode=="fuck":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="FUCK YOU!!!"))
         elif mode=="echo":
