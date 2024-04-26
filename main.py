@@ -364,8 +364,10 @@ def handle_message(event):
                 team[user][1] = time.time()
                 fb.put(url+"team/"+user+"/", data=team[user][1], name=1)
             if normal(user)==True:
+                print("normal user")
                 team[user][2] = int(fb.get(url+"team/"+user+"/2/", None))
                 if time.time()-team[user][2]<=10:
+                    print("on time")
                     if event.message.text == "fuck" or event.message.text == "Fuck":
                         team[user][3]+=5
                         print("get")
