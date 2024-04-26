@@ -372,10 +372,10 @@ def handle_message(event):
                 elif time.time()-team[user][2]>10 and team[user][3]!=0:
                     season[team[user][0]][0]+=team[user][3]
                     fb.put(url, data=season, name="season")
-                    reply = TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team.")
+                    #reply = TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team.")
                     team[user][3]=0
                     print("end")
-                    line_bot_api.reply_message(event.reply_token, reply)
+                    #line_bot_api.reply_message(event.reply_token, reply)
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
@@ -419,9 +419,9 @@ def handle_message(event):
                         reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to fuck again."))
                     if special == 1:
                         print("nigga")
-                        reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
-                        team[user][2]=time.time()
-                        fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
+                        #reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
+                        #team[user][2]=time.time()
+                        #fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
                     line_bot_api.reply_message(event.reply_token, reply)         
                 except KeyError:
                     if user not in team.keys():
