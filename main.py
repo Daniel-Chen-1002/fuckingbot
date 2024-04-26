@@ -366,6 +366,8 @@ def handle_message(event):
             if normal(user)==True:
                 print("normal user")
                 team[user][2] = int(fb.get(url+"team/"+user+"/2/", None))
+                print(time.time()-team[user][2])
+                print(team[user][3])
                 if time.time()-team[user][2]<=10:
                     print("on time")
                     if event.message.text == "fuck" or event.message.text == "Fuck":
@@ -378,6 +380,8 @@ def handle_message(event):
                     team[user][3]=0
                     print("end")
                     #line_bot_api.reply_message(event.reply_token, reply)
+                else:
+                    print("nothing")
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
