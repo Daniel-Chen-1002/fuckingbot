@@ -464,7 +464,7 @@ def handle_message(event):
                                "team":t,
                                "toggle":toggle
                                }
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=displayList[event.message.text.split(" ")[-1]]))
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(displayList[event.message.text.split(" ")[-1]])))
     if group == "C4b8e02e1ef606a620c7d5e8fd03a4824":
         if user == "U4e5ae01224117b28f662c288775be0a7":
             if event.message.text=="mode fuck":
