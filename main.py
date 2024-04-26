@@ -24,7 +24,7 @@ seasontime=0
 bank = {}
 banktimer={}
 mode = "echo"
-toggle = "None" #None Competitoin Season
+toggle = {"Season":[], "Competition":[], "Debug":[]} #{mode:groupID} mode: Season, Competition, Debug
 day = 0
 get_day = False
 
@@ -77,11 +77,12 @@ def handle_message(event):
     print(user)
     if event.message.text.split(" ")[0] == "!toggle":
         if user == "U4e5ae01224117b28f662c288775be0a7":
-            toggle = event.message.text.split(" ")[1]
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Successfully toggle to "+toggle))
+            toggle[event.message.text.split(" ")[1]].append(str(group))
+            reply = [TextSendMessage(text="Successfully toggle to "+toggle), TextSendMessage(text="group ID: "+str(group))]
+            line_bot_api.reply_message(event.reply_token, reply)
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="fuck you cheater"))
-    if toggle == "Competition":
+    if group in toggle["Competition"]:
         if event.message.text.split(" ")[0] == "!start":
             if event.message.text.split(" ")[1] == "comp":
                 if user == "U4e5ae01224117b28f662c288775be0a7":
@@ -153,7 +154,7 @@ def handle_message(event):
         if event.message.text == "stop":
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text=str(comp)))
             w.pop()
-    if toggle == "Season":
+    if group in toggle["Season"]:
         if event.message.text.split(" ")[0] == "!join":
             if user == "U4e5ae01224117b28f662c288775be0a7":
                 for i in event.message.mention.mentionees:
@@ -226,7 +227,7 @@ def handle_message(event):
                 line_bot_api.reply_message(event.reply_token, reply)
         if event.message.text.split(" ")[0] == "help" or event.message.text.split(" ")[0] == "Help":
             topic = event.message.text.split(" ")[1]
-            topicList={"fuck":"Fuck other team\nSteals points (0~)from other team ",
+            topicList={"fuck":"Fuck other team\nSteals points (0~20000)from other team ",
                        "bitch":"Hire a bitch to work for you\nprovides chance to block fucks from opponents\nSyntax: bitch",
                        "viagra":"Boost your dick that is used to fuck\nincrease fuck point multiplier\nSyntax: viagra",
                        "report":"Reports other player\n??"+"%"+" chance to success\nSuccess: banning opponent for 1 hour\nFail: banning yourself for 15 minutes\nSyntax: report [opponent]",
@@ -441,6 +442,8 @@ def handle_message(event):
             if seasontime!=0:
                 line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Season has ended, please contact the administrator to announce the result or use !stat command to see it yourself."))
     print(group)
+    if group in toggle["Debug"]:
+        pass
     if group == "C4b8e02e1ef606a620c7d5e8fd03a4824":
         if event.message.text=="mode fuck":
             mode = "fuck"
