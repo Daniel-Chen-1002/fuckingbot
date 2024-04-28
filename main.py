@@ -299,7 +299,7 @@ def handle_message(event):
                     if time.time()-team[user][4]>7200:
                         reply=[]
                         if random.randint(1, 2)==1:
-                            team[event.message.mention.mentionees[0].user_id][1]=time.time()+1800
+                            team[event.message.mention.mentionees[0].user_id][1]=time.time()+3600
                             reply.append(TextSendMessage(text="You reported "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" to the Gender Equality Committee....."))
                             reply.append(TextSendMessage(text="Success! "+line_bot_api.get_profile(event.message.mention.mentionees[0].user_id).display_name+" is put into jail for 1 hours."))
                         else:
@@ -368,25 +368,25 @@ def handle_message(event):
                 team[user][2] = int(fb.get(url+"team/"+user+"/2/", None))
                 print(time.time()-team[user][2])
                 print(team[user][3])
-                if time.time()-team[user][2]<=10:
+                if time.time()-team[user][2]<=15:
                     print("on time")
                     if event.message.text == "fuck" or event.message.text == "Fuck":
-                        team[user][3]+=5
+                        team[user][3]+=random.randint(100, 500)
                         print("get")
                 elif time.time()-team[user][2]>10 and team[user][3]!=0:
                     season[team[user][0]][0]+=team[user][3]
                     fb.put(url, data=season, name="season")
-                    #reply = TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team.")
+                    reply = TextSendMessage(text="Time's up!, you got "+str(team[user][3])+"points for your team.")
                     team[user][3]=0
                     print("end")
-                    #line_bot_api.reply_message(event.reply_token, reply)
+                    line_bot_api.reply_message(event.reply_token, reply)
                 else:
                     print("nothing")
             if (event.message.text.split(" ")[0] == "fuck" or event.message.text.split(" ")[0] == "Fuck") and len(event.message.text.split(" "))>1:
                 season = fb.get(url+"season/", None)
                 bank = fb.get(url+"bank/", None)
                 banktimer = fb.get(url+"banktimer/", None)
-                special = 1
+                special = 0
                 try:
                     reply = []
                     if time.time()-team[user][1]>1800:
@@ -425,7 +425,7 @@ def handle_message(event):
                         reply.append(TextSendMessage(text="Fuck you son of a bitch, you need to wait "+str(int((1800-(time.time()-team[user][1]))//60))+"M "+str(int((1800-(time.time()-team[user][1]))%60//1))+"S to fuck again."))
                     if special == 1:
                         print("nigga")
-                        #reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
+                        reply.append(TextSendMessage(text="⚠️SPECIAL EVENT⚠️ Type as much 'fuck' as you can."))
                         team[user][2]=time.time()
                         fb.put(url+"team/"+user+"/", data=team[user][2], name=2)
                     line_bot_api.reply_message(event.reply_token, reply)         
@@ -488,4 +488,3 @@ def handle_message(event):
     #line_bot_api.reply_message(event.reply_token, TextSendMessage(text=reply))
 if __name__ == '__main__':
     app.run()
-
